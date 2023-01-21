@@ -1,6 +1,8 @@
+# docker build .
+
 FROM ubuntu:22.04
 
-LABEL maintainer="f20171569@hyderabad.bits-pilani.ac.in"
+LABEL maintainer="nicholas.skinner95@gmail.com"
 
 #ROS2 Installation Starts
 # setup timezone
@@ -66,35 +68,50 @@ RUN pip3 install -U \
 RUN pip3 freeze | grep pytest \
     && python3 -m pytest --version
 
-#Install ROS2 packages
 RUN apt update
-RUN DEBIAN_FRONTEND=noninteractive apt install -y ros-humble-desktop
-RUN apt install -y ros-humble-slam-toolbox
-RUN apt install -y ros-humble-cv-bridge ros-humble-librealsense2 ros-humble-message-filters ros-humble-image-transport
-RUN apt install -y libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
-RUN apt install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
-#RUN apt install ros-humble-realsense-camera-msgs ros-humble-realsense-ros2-camera
+RUN apt-get install -y software-properties-common
+RUN apt-get install -y libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev 
+RUN apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 
 #Install Intel Realsense
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-RUN apt install -y software-properties-common
-RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
-RUN apt-get install -y librealsense2-dkms
+
+RUN if [ "$(dpkg --print-architecture)" = "arm64" ] ; then echo "deb https://librealsense.intel.com/Debian/apt-repo bionic main" >> /etc/apt/sources.list ; else add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u ; fi
+RUN if [ "$(dpkg --print-architecture)" = "arm64" ] ; then echo "deb https://librealsense.intel.com/Debian/apt-repo focal main" >> /etc/apt/sources.list ; fi
+#RUN echo "deb https://librealsense.intel.com/Debian/apt-repo bionic main" >> /etc/apt/sources.list
+#RUN echo "deb https://librealsense.intel.com/Debian/apt-repo focal main" >> /etc/apt/sources.list
+
+# Manually set repo, as issues happen on the Jetson nano with Jammy as the container
+#RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+RUN apt-get update
+# DKMS not currently found.
+# RUN apt-get install -y librealsense2-dkms
 RUN apt-get install -y librealsense2-utils
 RUN apt-get install -y librealsense2-dbg
+
+# Install ROS2 Packages
+RUN DEBIAN_FRONTEND=noninteractive apt install -y ros-humble-desktop
+RUN apt-get install -y ros-humble-cv-bridge
+RUN apt-get install -y ros-humble-librealsense2
 RUN apt-get install -y ros-humble-realsense2-camera
+#RUN apt-get install -y ros-humble-realsense-camera-msgs
+#RUN apt-get install -y ros-humble-realsense-ros2-camera
+RUN apt-get install -y ros-humble-message-filters
+RUN apt-get install -y ros-humble-image-transport
+RUN apt-get install -y ros-humble-slam-toolbox
 RUN apt-get install -y ros-humble-robot-localization
 RUN apt-get install -y ros-humble-rtabmap-ros
 RUN apt-get install -y ros-humble-joint-state-publisher
-RUN apt-get install -y ros-humble-joint-state-publisher-gui
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-joint-state-publisher-gui ; fi
 RUN apt-get install -y ros-humble-robot-state-publisher
 RUN apt-get install -y ros-humble-xacro
-RUN apt-get install -y ros-humble-gazebo-ros
-RUN apt-get install -y ros-humble-gazebo-plugins
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-ros ; fi
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-plugins ; fi
 RUN apt-get install -y ros-humble-camera-info-manager
 RUN apt-get install -y ros-humble-nav2-bringup
 RUN apt-get install -y ros-humble-navigation2
+RUN apt-get install -y ros-humble-libg2o
 
 # Needed because default DDS sucks.
 RUN apt install -y ros-humble-rmw-cyclonedds-cpp
@@ -110,13 +127,13 @@ ENV NVIDIA_VISIBLE_DEVICES \
 ENV NVIDIA_DRIVER_CAPABILITIES \
     ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-#Make ROS2 Workspace, install packages
+# Make ROS2 Workspace, install packages
 WORKDIR /root/dd_ws/src
 #RUN git clone https://github.com/ros/ros_tutorials.git -b humble-devel
 #RUN git clone https://github.com/ros2-gbp/cartographer-release.git -b release/humble/cartographer
 
 WORKDIR /root/dd_ws
-RUN apt-get install python3-rosdep -y
+RUN apt-get install -y python3-rosdep
 RUN rosdep init
 RUN rosdep update
 RUN rosdep install -i --from-path src --rosdistro humble -y
@@ -124,20 +141,10 @@ RUN rosdep install -i --from-path src --rosdistro humble -y
 WORKDIR /root/dd_ws
 RUN . /opt/ros/humble/setup.sh && export MAKEFLAGS="-j6" && colcon build --symlink-install
 
-RUN apt install ros-humble-libg2o -y
-
-WORKDIR /root/dd_ws/src
-#RUN git clone https://github.com/jdgalviss/realsense_ros2.git
-#RUN git clone https://github.com/ros-perception/pointcloud_to_laserscan.git
-
-# 3D rotating LIDAR
-#RUN git clone --recursive https://github.com/rsasaki0109/lidarslam_ros2
-#RUN git clone --recursive https://github.com/rsasaki0109/ndt_omp_ros2.git
-
 WORKDIR /root/dd_ws
 RUN . /opt/ros/humble/setup.sh && colcon build
 
-
+# Install HAL Python packages
 RUN pip3 install \
     evdev \
     pyPS4Controller \
@@ -145,13 +152,7 @@ RUN pip3 install \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-
-
-# install Gazebo -- THIS IS NTHE NON-ROS SPECIFIC VERSION
-#RUN curl -sSL http://get.gazebosim.org | sh
-
 #entrypoint for ROS2
 COPY ros2_entrypoint.sh /root/.
 ENTRYPOINT ["/root/ros2_entrypoint.sh"]
 CMD ["bash"]
-
