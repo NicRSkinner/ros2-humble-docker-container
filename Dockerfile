@@ -156,3 +156,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 COPY ros2_entrypoint.sh /root/.
 ENTRYPOINT ["/root/ros2_entrypoint.sh"]
 CMD ["bash"]
+
+
+
+

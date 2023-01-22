@@ -3,6 +3,7 @@ XAUTH=/home/$USER/.Xauthority
 docker run -it \
     --net=host \
     --privileged \
+    --platform arm64 \
     -p $1:8800 \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
