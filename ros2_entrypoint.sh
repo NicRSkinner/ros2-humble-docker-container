@@ -8,6 +8,7 @@ export GAZEBO_MODEL_PATH=${installPrefix}/share/gazebo-11/models:${GAZEBO_MODEL_
 source "/opt/ros/humble/setup.bash"
 source "/root/dd_ws/install/setup.bash"
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export MAKEFLAGS='-j4'
 
 if [ -f "/root/dd_ws/ardak/install/setup.bash" ]; then
     source "/root/dd_ws/ardak/install/setup.bash"
