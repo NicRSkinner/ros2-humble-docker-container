@@ -4,12 +4,15 @@ docker run -it \
     --net=host \
     --privileged \
     -p $1:8800 \
-    --env="DISPLAY=$DISPLAY" \
-    --env="QT_X11_NO_MITSHM=1" \
+    -e XDG_RUNTIME_DIR=/tmp \
+    -e DISPLAY=$DISPLAY \
+    -e GDK_BACKEND=wayland \
+    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+    -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY  \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
     --gpus all \
+    --ipc=host \
     -v /run/udev:/run/udev:ro \
     -v /dev:/dev \
     -v /home/$USER/.gazebo:/root/.gazebo \

@@ -70,7 +70,7 @@ RUN pip3 freeze | grep pytest \
 
 RUN apt update
 RUN apt-get install -y software-properties-common
-RUN apt-get install -y libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev 
+RUN apt-get install -y libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
 RUN apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 
 #Install Intel Realsense
@@ -152,11 +152,10 @@ RUN pip3 install \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
+RUN apt-get install -y xwayland
+RUN apt-get install -y dbus-x11
+
 #entrypoint for ROS2
 COPY ros2_entrypoint.sh /root/.
 ENTRYPOINT ["/root/ros2_entrypoint.sh"]
 CMD ["bash"]
-
-
-
-
