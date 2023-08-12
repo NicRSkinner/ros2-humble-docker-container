@@ -1,0 +1,10 @@
+#!/usr/bin/env expect
+set timeout 50000000000000000000000
+spawn apt-get install -y nvidia-cudnn
+
+expect "Do you agree to all terms of the Nvidia cuDNN License Agreement?"
+# Send "I Agree"
+send -- "2\r"
+
+
+expect eof

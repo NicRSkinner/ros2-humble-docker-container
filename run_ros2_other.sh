@@ -1,8 +1,6 @@
 XAUTH=/home/$USER/.Xauthority
 
 docker run -it \
-    -p 8080:80 \
-    -p 10621:10621 \
     --privileged \
     --expose 10621 \
     --env="DISPLAY" \
