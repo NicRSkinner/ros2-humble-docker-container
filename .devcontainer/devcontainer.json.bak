@@ -1,0 +1,17 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "dockros",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/nvidia-cuda:1": {}
+	},
+	"runArgs": ["--gpus", "all"],
+	"workspaceMount": "source=${localWorkspaceFolder}/ardak,target=/root/dd_ws/ardak,type=bind",
+	"workspaceFolder": "/root/dd_ws/ardak",
+	"forwardPorts": [3000]
+}

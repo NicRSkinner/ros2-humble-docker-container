@@ -1,3 +1,6 @@
 *.tar
 .vscode/*
 .vscode/
+ardak/*
+ardak/
+*.run

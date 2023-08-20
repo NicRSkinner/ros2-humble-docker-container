@@ -1,0 +1,13 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "dockros",
+
+	// This image has to be built separately
+	"image": "dockros:latest",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"runArgs": ["--gpus", "all", "-e", "DISPLAY=$DISPLAY"],
+	"workspaceMount": "source=${localWorkspaceFolder}/ardak,target=/root/dd_ws/ardak,type=bind",
+	"workspaceFolder": "/root/dd_ws/ardak",
+	"forwardPorts": [3000]
+}
