@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 export GAZEBO_PLUGIN_PATH=${installPrefix}/lib/x86_64-linux-gnu/gazebo-11/plugins:${GAZEBO_PLUGIN_PATH}
 export GAZEBO_MODEL_PATH=${installPrefix}/share/gazebo-11/models:${GAZEBO_MODEL_PATH}:/root/dd_ws/ardak/src/ardak/description/
@@ -19,5 +18,9 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export MAKEFLAGS='-j4'
 alias build_amd="colcon build --install-base=install_amd64 --build-base=build_amd64"
 alias build_arm="colcon build --install-base=install_arm64 --build-base=build_arm64 --packages-skip=realsense_gazebo_plugin"
+
+alias xvfb="export DISPLAY=:1 && Xvfb $DISPLAY -screen 0 1024x768x16 &"
+alias gzdeploy="npm run --prefix /root/dd_ws/gzweb deploy ---"
+alias gzweb="npm run --prefix /root/dd_ws/gzweb/ start -p 10622 &"
 
 exec "$@"

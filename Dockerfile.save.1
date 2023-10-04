@@ -151,18 +151,8 @@ RUN apt-get install -y ros-humble-joint-state-publisher
 RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-joint-state-publisher-gui ; fi
 RUN apt-get install -y ros-humble-robot-state-publisher
 RUN apt-get install -y ros-humble-xacro
-#RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-ros ; fi
-#RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-plugins ; fi
-
-RUN apt-get install -y ros-humble-ros-gz
-RUN apt-get install -y ros-humble-ros-ign-bridge
-
-# TRASH DOESN'T WORK
-#RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list
-#RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys D2486D2DD83DB69272AFE98867170598AF249743
-#RUN apt-get update
-#RUN apt-get install -y libignition-gui2-dev
-
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-ros ; fi
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-plugins ; fi
 RUN apt-get install -y ros-humble-camera-info-manager
 RUN apt-get install -y ros-humble-nav2-bringup
 RUN apt-get install -y ros-humble-navigation2
@@ -212,37 +202,16 @@ RUN apt-get install -y ros-humble-foxglove-bridge
 
 RUN rm -rf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu/libcuda.so.1 /usr/lib/x86_64-linux-gnu/libcudadebugger.so.1
 
-# Gzweb install (OLD?)
-#RUN apt-get install -y libjansson-dev libboost-dev imagemagick libtinyxml-dev mercurial
-#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-#RUN . /root/.bashrc && nvm install 18 && nvm use 18
-#WORKDIR /root/dd_ws
-#RUN apt-get install -y npm
-#RUN npm install gzweb
-#RUN git clone https://github.com/osrf/gzweb.git
-#RUN cd gzweb
-#RUN . /usr/share/gazebo/setup.sh
-#WORKDIR /root/dd_ws/gzweb
-#RUN npm run deploy --- # For some reason this upsets nodeJS
-#WORKDIR /root/dd_ws
-
-# Gzweb install (NEW?)
-RUN apt-get install -y npm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.0/install.sh | bash
-RUN . /root/.bashrc && nvm install 14 && nvm use 14
-#RUN node -v && npm -v
-
+# Gzweb install
+RUN apt-get install -y libjansson-dev libboost-dev imagemagick libtinyxml-dev mercurial
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+RUN . /root/.bashrc && nvm install 18 && nvm use 18
 WORKDIR /root/dd_ws
-RUN git clone https://github.com/gazebo-web/gazebosim-frontend.git
-WORKDIR /root/dd_ws/gazebosim-frontend
-RUN npm install
-RUN npm install gzweb
-RUN npm install -g @angular/cli
-
-RUN apt-get install -y x11vnc xvfb #Use export DISPLAY=:1 and Xvfb $DISPLAY -screen 0 1024x768x16 & for headless gzserver
+RUN apt-get install -y npm
+#RUN npm install gzweb
+RUN git clone 
 
 #entrypoint for ROS2
 COPY ros2_entrypoint.sh /root/.
 ENTRYPOINT ["/root/ros2_entrypoint.sh"]
-RUN echo "source /root/ros2_entrypoint.sh" >> /root/.bashrc
 CMD ["bash"]
