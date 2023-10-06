@@ -20,7 +20,7 @@ alias build_amd="colcon build --install-base=install_amd64 --build-base=build_am
 alias build_arm="colcon build --install-base=install_arm64 --build-base=build_arm64 --packages-skip=realsense_gazebo_plugin"
 
 alias xvfb="export DISPLAY=:1 && Xvfb $DISPLAY -screen 0 1024x768x16 &"
-alias gzdeploy="npm run --prefix /root/dd_ws/gzweb deploy ---"
-alias gzweb="npm run --prefix /root/dd_ws/gzweb/ start -p 10622 &"
+#alias gzdeploy="npm run --prefix /root/dd_ws/gzweb deploy ---"
+#alias gzweb="npm run --prefix /root/dd_ws/gzweb/ start -p 10622 &"
 
 exec "$@"

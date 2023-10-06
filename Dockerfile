@@ -137,7 +137,7 @@ RUN make -j4
 RUN make install -j4
 
 # Install ROS2 Packages
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ros-humble-desktop
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ros-humble-desktop-full
 RUN apt-get install -y ros-humble-cv-bridge
 RUN apt-get install -y ros-humble-librealsense2
 #RUN apt-get install -y ros-humble-realsense-camera-msgs
@@ -154,7 +154,12 @@ RUN apt-get install -y ros-humble-xacro
 #RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-ros ; fi
 #RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; then apt-get install -y ros-humble-gazebo-plugins ; fi
 
-RUN apt-get install -y ros-humble-ros-gz
+#RUN apt-get install -y ros-humble-ros-gz
+
+RUN wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
+RUN apt-get update
+RUN apt-get install -y ignition-fortress
 RUN apt-get install -y ros-humble-ros-ign-bridge
 
 # TRASH DOESN'T WORK
@@ -201,7 +206,7 @@ RUN pip3 install \
     evdev \
     pyPS4Controller \
     odrive
-
+    
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /root/dd_ws
@@ -227,19 +232,19 @@ RUN rm -rf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu
 #WORKDIR /root/dd_ws
 
 # Gzweb install (NEW?)
-RUN apt-get install -y npm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.0/install.sh | bash
-RUN . /root/.bashrc && nvm install 14 && nvm use 14
+#RUN apt-get install -y npm
+#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.0/install.sh | bash
+#RUN . /root/.bashrc && nvm install 14 && nvm use 14
 #RUN node -v && npm -v
 
-WORKDIR /root/dd_ws
-RUN git clone https://github.com/gazebo-web/gazebosim-frontend.git
-WORKDIR /root/dd_ws/gazebosim-frontend
-RUN npm install
-RUN npm install gzweb
-RUN npm install -g @angular/cli
+#WORKDIR /root/dd_ws
+#RUN git clone https://github.com/gazebo-web/gazebosim-frontend.git
+#WORKDIR /root/dd_ws/gazebosim-frontend
+#RUN npm install
+#RUN npm install gzweb
+#RUN npm install -g @angular/cli
 
-RUN apt-get install -y x11vnc xvfb #Use export DISPLAY=:1 and Xvfb $DISPLAY -screen 0 1024x768x16 & for headless gzserver
+RUN apt-get install -y x11vnc xvfb fluxbox #Use export DISPLAY=:1 and Xvfb $DISPLAY -screen 0 1024x768x16 & for headless gzserver
 
 #entrypoint for ROS2
 COPY ros2_entrypoint.sh /root/.

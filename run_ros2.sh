@@ -1,13 +1,10 @@
 XAUTH=/home/$USER/.Xauthority
 
 docker run -it \
-    -p 8080:80 \
-    -p 10621:10621 \
-    -p 10622:10622 \
-    -p 3000:3000 \
+    --net=host \
     --privileged \
-    --expose 10621 \
-    --env="DISPLAY=:0" \
+    -p $1:8800 \
+    --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
@@ -19,5 +16,5 @@ docker run -it \
     -v /home/$USER/Documents/ardak/:/root/dd_ws/ardak \
     -v /home/$USER/Documents/ros-inc/:/opt/ros/foxy/cp \
     -v /home/$USER/Documents/cp:/root/dd_ws/cp \
-    dockros \
+    dockros  \
     bash
