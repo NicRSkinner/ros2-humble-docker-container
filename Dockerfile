@@ -90,6 +90,7 @@ RUN if [ "$(dpkg --print-architecture)" = "arm64" ] ; then echo "deb https://lib
 RUN apt-get update
 # DKMS not currently found.
 # RUN apt-get install -y librealsense2-dkms
+RUN apt-get install -y librealsense2
 RUN apt-get install -y librealsense2-utils
 RUN apt-get install -y librealsense2-dbg
 
@@ -139,7 +140,10 @@ RUN make install -j4
 # Install ROS2 Packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ros-humble-desktop-full
 RUN apt-get install -y ros-humble-cv-bridge
+
+# Install librealsense manually, because Intel discontinued (forcefully) the T265 from ROS2.
 RUN apt-get install -y ros-humble-librealsense2
+
 #RUN apt-get install -y ros-humble-realsense-camera-msgs
 #RUN apt-get install -y ros-humble-realsense-ros2-camera
 RUN apt-get install -y ros-humble-message-filters

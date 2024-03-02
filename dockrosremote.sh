@@ -1,8 +1,8 @@
 #!/bin/bash
 #sudo systemctl stop sddm
-#export DISPLAY=:0
+export DISPLAY=:0
 #Xvfb $DISPLAY &
 sudo xhost +local:
-x11vnc -nopw -quiet &
+x11vnc -nopw -quiet -noxdamage &
 xhost +SI:localuser:root
 sh /home/nick/Documents/ros2-humble-docker-container/run_ros2.sh

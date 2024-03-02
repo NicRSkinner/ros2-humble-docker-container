@@ -16,5 +16,6 @@ docker run -it \
     -v /home/$USER/Documents/ardak/:/root/dd_ws/ardak \
     -v /home/$USER/Documents/ros-inc/:/opt/ros/foxy/cp \
     -v /home/$USER/Documents/cp:/root/dd_ws/cp \
+    -v /home/$USER/Documents/ardak/certs/:/usr/share/rosbridge/certifications \
     dockros  \
     bash
