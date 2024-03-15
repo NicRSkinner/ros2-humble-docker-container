@@ -285,4 +285,12 @@ FROM hardware as prod
 COPY ros2_entrypoint.sh /root/.
 ENTRYPOINT ["/root/ros2_entrypoint.sh"]
 RUN echo "source /root/ros2_entrypoint.sh" >> /root/.bashrc
+
+RUN useradd -ms /bin/bash ardak
+USER ardak
+WORKDIR /home/ardak
+COPY ros2_entrypoint.sh /home/ardak/.
+ENTRYPOINT ["/home/ardak/ros2_entrypoint.sh"]
+RUN echo "source /home/ardak/ros2_entrypoint.sh" >> /home/ardak/.bashrc
+
 CMD ["bash"]

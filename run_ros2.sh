@@ -2,7 +2,6 @@ XAUTH=/home/$USER/.Xauthority
 
 docker run -it \
     --net=host \
-    --privileged \
     -p $1:8800 \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
@@ -17,5 +16,6 @@ docker run -it \
     -v /home/$USER/Documents/ros-inc/:/opt/ros/foxy/cp \
     -v /home/$USER/Documents/cp:/root/dd_ws/cp \
     -v /home/$USER/Documents/ardak/certs/:/usr/share/rosbridge/certifications \
+    --user ardak \
     dockros  \
     bash
