@@ -12,10 +12,10 @@ docker run -it \
     -v /run/udev:/run/udev:ro \
     -v /dev:/dev \
     -v /home/$USER/.gazebo:/root/.gazebo \
-    -v /home/$USER/Documents/ardak/:/root/dd_ws/ardak \
+    -v /home/$USER/Documents/ardak/:/home/ardak/ardak \
     -v /home/$USER/Documents/ros-inc/:/opt/ros/foxy/cp \
     -v /home/$USER/Documents/cp:/root/dd_ws/cp \
     -v /home/$USER/Documents/ardak/certs/:/usr/share/rosbridge/certifications \
-    --user ardak \
+    --user root \
     dockros  \
     bash

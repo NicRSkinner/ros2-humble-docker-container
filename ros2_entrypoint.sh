@@ -24,3 +24,7 @@ alias xvfb="export DISPLAY=:1 && Xvfb $DISPLAY -screen 0 1024x768x16 &"
 #alias gzweb="npm run --prefix /root/dd_ws/gzweb/ start -p 10622 &"
 
 exec "$@"
+
+if [[ $(whoami) == "root" ]]; then
+        /bin/bash -c "su - ardak"
+fi
