@@ -1,6 +1,6 @@
 # docker build .
 
-FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04 as base
+FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04 as base
 
 LABEL maintainer="nicholas.skinner95@gmail.com"
 
@@ -242,7 +242,9 @@ RUN pip3 install \
     evdev \
     pyPS4Controller \
     odrive
-    
+
+RUN bash -c "curl https://cdn.odriverobotics.com/files/odrive-udev-rules.rules > /etc/udev/rules.d/91-odrive.rules"
+
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN rm -rf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu/libcuda.so.1 /usr/lib/x86_64-linux-gnu/libcudadebugger.so.1

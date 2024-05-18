@@ -1,6 +1,7 @@
 XAUTH=/home/$USER/.Xauthority
 
 docker run -it \
+    --privileged \
     --net=host \
     -p $1:8800 \
     --env="DISPLAY=$DISPLAY" \
@@ -14,7 +15,7 @@ docker run -it \
     -v /home/$USER/.gazebo:/root/.gazebo \
     -v /home/$USER/Documents/ardak/:/home/ardak/ardak \
     -v /home/$USER/Documents/ros-inc/:/opt/ros/foxy/cp \
-    -v /home/$USER/Documents/cp:/root/dd_ws/cp \
+    -v /home/$USER/Documents/copy:/root/dd_ws/copy \
     -v /home/$USER/Documents/ardak/certs/:/usr/share/rosbridge/certifications \
     --user root \
     dockros  \

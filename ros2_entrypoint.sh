@@ -14,7 +14,8 @@ fi
 #        source "/root/dd_ws/install/setup.bash"
 #fi
 
-export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+#export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 export MAKEFLAGS='-j4'
 alias build_amd="colcon build --install-base=install_amd64 --build-base=build_amd64"
 alias build_arm="colcon build --install-base=install_arm64 --build-base=build_arm64 --packages-skip=realsense_gazebo_plugin"
